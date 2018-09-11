@@ -1,0 +1,14 @@
+/* CSS Document */
+.registrationDiv{
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+	height: 240px;
+	margin-bottom: 10px;
+}
+.noShowed{
+	display: none;
+}
+.showed{
+	display: block;
+}

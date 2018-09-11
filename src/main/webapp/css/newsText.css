@@ -1,0 +1,109 @@
+@charset "utf-8";
+* {                  /* 清除不同浏览器的不同外边距 */
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.frame{
+	margin-left: auto;
+	margin-right: auto;
+	width: 1366px;
+	position:relative;
+}
+
+.top{
+	margin-left: auto;
+	margin-right: auto;
+	width:1024px;
+}
+.newslist{
+	margin-left: auto;
+	margin-right: auto;
+	width: 1200px;
+	height: 600px;
+}
+.bottom {
+	width: 820px;
+	height: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 1px solid #000000;
+}
+.bottom p{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.Text{
+	width: 1024px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+.TextHead{
+	width: 500px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+.TextHead h1{
+	width: 500px;
+	height: 20px;
+	text-align: center;
+	font-size: 20px;
+	line-height: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+.TextBody{
+	width: 1024px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	margin-top: 5px;
+	padding-bottom: 20px;
+}
+.TextBody p{
+	margin-top: 10px;
+	text-indent: 30px;
+}
+.TextComment{
+	width: 1024px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 20px;
+}
+.TextComment input{
+	margin-left: auto;
+	margin-right: auto;
+	display:block;
+}
+.UsersComment{
+	width: 700px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+.UsersComment table{
+	margin-left: auto;
+	margin-right: auto;
+	border-bottom: 0.5px solid #6E6E6E;
+}
+.userName{
+	text-indent:0em;
+	text-align: left;
+	color: #00bc3e;
+}
+.reviewTime{
+	text-indent:0em;
+	text-align: left;
+	color: #bbbbbb;
+	font-size: 16px;
+}

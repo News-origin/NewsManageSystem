@@ -1,0 +1,66 @@
+/* CSS Document */
+.tabFrame {
+	margin-left: auto;/* 水平居中 */
+	margin-right: auto;/* 水平居中 */	
+	float: left;
+	position: relative;/* 相对定位： 为了子元素能够使用绝对定位 */
+	left: 0px;/* 为了子元素能够使用绝对定位 */
+	top: 0px;/* 为了子元素能够使用绝对定位 */
+}
+
+.tabHeadDiv {
+	height: 30px;
+	border-left: 1px solid #E9090D;
+	border-right: 1px solid #E9090D;
+	border-top: 1px solid #E9090D;
+	
+}
+
+.tabHead {
+	line-height: 28px; /* 垂直居中 */
+	text-align: center;/* 垂直居中 */
+	float: left;
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #E9090D;
+	border-right: 1px solid #E9090D;
+}
+
+.tabHeadLast {
+	border-right: 0px;	
+}
+
+.tabHeadShow {
+	background-color: #FF5A5D;
+	border-bottom: 1px solid #FFFFFF;
+	color: #FFFFFF;
+}
+
+.tabBody {
+	position: absolute;
+	left: 0px;
+	top: 30px;
+	width: 100%;
+	background-color: #FFF;
+	visibility: hidden;
+}
+.tabBody ul{
+	margin-top: 5px;
+	margin-left: 20px;
+}
+.tabBody a:link,.tabBody a:visited{
+	color: #000000;
+	text-decoration: none;
+	font-size: large;
+}
+
+.tabBodyShow {	
+	visibility: visible;
+	z-index: 2;
+	border-right: 1px solid #E9090D;
+	border-bottom: 1px solid #E9090D;
+	border-left: 1px solid #E9090D;
+}
+
+.clear {
+	clear: both;
+}

@@ -1,0 +1,79 @@
+/* CSS Document */
+* {                  /* 清除不同浏览器的不同外边距 */
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.frame{
+	margin-left: auto;
+	margin-right: auto;
+	width: 1366px;
+	position:relative;
+}
+
+.top{
+	margin-left: auto;
+	margin-right: auto;
+	width:1024px;
+}
+.middle {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+	height: 366px;
+}
+.newslist{
+	margin-left: auto;
+	margin-right: auto;
+	width: 1200px;
+	height: 600px;
+}
+.list{
+	float: left;
+	width: 500px;
+	height: 280px;
+	margin-right: 10px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+.listhead{
+	width: 500px;
+	background-color: #D1D3FF;
+}
+.listBody{
+	width: 500px;
+}
+.listBody ul li{
+	width: 500px;
+	line-height: 30px;
+}
+.listBody ul li a{
+	width: 70%;
+	float: left;
+	color: #1A66FF;
+	line-height: 30px;
+	font-size: 15px;
+}
+.listBody ul li div{
+	width: 30%;
+	line-height: 30px;
+	float: left;
+	text-align: right;
+	font-size: 15px;
+}
+.bottom {
+	width: 820px;
+	height: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	border-top: 1px solid #000000;
+}
+.bottom p{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
