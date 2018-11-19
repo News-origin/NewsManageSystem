@@ -69,18 +69,16 @@ public class LoginCheckFilter implements Filter {
 				res.sendRedirect("/index.jsp");
 			}
 		}
-		// 访问的是受限制网页且是normalUsersManagement.jsp
-		else if (flag && (req.getServletPath().equals("/normalUsersManagement.jsp"))) {
+		// 访问的是受限制网页且是userMain.jsp
+		else if (flag && (req.getServletPath().equals("/userMain.jsp"))) {
 			if (user == null) {
 				res.sendRedirect("/NewsManageSystem/login.jsp");
-			} else if ("newsAuthor".equals(user.getType())) {
-				res.sendRedirect("/NewsManageSystem/index.jsp");
-			} else if ("manager".equals(user.getType())) {
-				res.sendRedirect("/NewsManageSystem/index.jsp");
-			} else {
+			}
+			else {
 				chain.doFilter(request, response);
 			}
 		}
+		/*
 		// 访问的是受限制网页且是newsAuthor.jsp
 		else if (flag && (req.getServletPath().equals("/newsAuthor.jsp"))) {
 			if (user == null) {
@@ -95,6 +93,7 @@ public class LoginCheckFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 		}
+		*/
 		// 访问的是受限制网页且是addNews.jsp
 		else if (flag && (req.getServletPath().equals("/addNews.jsp"))) {
 			if (user == null) {
@@ -109,6 +108,7 @@ public class LoginCheckFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 		}
+		/*
 		// 访问的是受限制网页且是manager.jsp
 		else if (flag && (req.getServletPath().equals("/manager.jsp"))) {
 			if (user == null) {
@@ -123,6 +123,7 @@ public class LoginCheckFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 		}
+		*/
 		// 访问的不是受限制网页
 		else {
 			chain.doFilter(request, response);

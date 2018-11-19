@@ -18,17 +18,7 @@
 							<a href="/NewsManageSystem/login.jsp">登录</a>
 						</c:if>
 						<c:if test="${sessionScope.user!=null}">
-							<c:choose>
-								<c:when test="${sessionScope.user.type=='user'}">
-									<a href="/NewsManageSystem/normalUsersManagement.jsp"><c:out value="${sessionScope.user.name}" /></a>
-								</c:when>
-								<c:when test="${sessionScope.user.type=='newsAuthor'}">
-									<a href="/NewsManageSystem/newsAuthor.jsp"><c:out value="${sessionScope.user.name}" /></a>
-								</c:when>
-								<c:when test="${sessionScope.user.type=='manager'}">
-									<a href="/NewsManageSystem/manager.jsp"><c:out value="${sessionScope.user.name}" /></a>
-								</c:when>
-							</c:choose>
+							<a href="/NewsManageSystem/userMain.jsp"><c:out value="${sessionScope.user.name}" /></a>
 						</c:if>
 					</td>
 					<td width="148" align="center" valign="middle">

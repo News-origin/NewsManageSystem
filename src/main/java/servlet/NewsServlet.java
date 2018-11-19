@@ -130,7 +130,14 @@ public class NewsServlet extends HttpServlet {
 			int newsId=Integer.parseInt(request.getParameter("newsId"));
 			NewsService newsService=new NewsService();
 			newsService.deleteNews(newsId);
-			response.sendRedirect("/NewsManageSystem/manager.jsp");
+			//重新获取一页新闻
+			PageInformation pageInformation=new PageInformation();
+			Tool.getPageInformation("news", request, pageInformation);
+			newsService=new NewsService();
+			List<News> newses=newsService.getOnePage(pageInformation);
+			request.setAttribute("pageInformation", pageInformation);
+			request.setAttribute("newses", newses);
+			getServletContext().getRequestDispatcher("/manageNews.jsp").forward(request,response);
 		}
 		else if("searchNews".equals(type)){
 			String keyWord=request.getParameter("keyWord");

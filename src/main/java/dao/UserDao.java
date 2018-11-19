@@ -1,7 +1,5 @@
 package dao;
 
-import java.sql.ResultSet;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +66,8 @@ public class UserDao {
 		return null;
 	}
 	//是否已存在这个用户名
-	public Integer hasUser(User user,DatabaseDao databaseDao) throws SQLException{
+	public Integer hasUser(User user) throws Exception{
+		DatabaseDao databaseDao=new DatabaseDao();
 		String sql="select * from user where name='"+user.getName()+"'";
 		databaseDao.query(sql);
 		while(databaseDao.next()){
@@ -78,67 +77,36 @@ public class UserDao {
 	}
 	
 	//注册
-	public void register(User user,DatabaseDao databaseDao) throws SQLException{
-		String sql="insert into user(type,name,password,enable) values('"+
-				user.getType()+"','"+user.getName()+"','"+
-				user.getPassword()+"','"+user.getEnable()+"')";
-		databaseDao.update(sql);
-		sql="SELECT userId FROM user WHERE name LIKE '"+user.getName()+"'";
-		databaseDao.query(sql);
-		int userId = -1;	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
-		while(databaseDao.next()){
-			userId=databaseDao.getInt("userId");	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
-		}
-		sql="insert into userinformation(userId) values("+userId+")";	//插入该用户的信息
-		databaseDao.update(sql);
-		//databaseDao.close();
-	}
-	
-	//登录
-	public Integer login(User user) throws SQLException, Exception{
+	public boolean emailRegister(User user) throws Exception{
 		DatabaseDao databaseDao=new DatabaseDao();
-		String sql="SELECT *"+" FROM user u1,userinformation u2"+" WHERE u1.userId=u2.userId AND u1.name LIKE '"+user.getName()+"' AND u1.password LIKE '"+user.getPassword()+"'";
-		System.out.println(sql);
-		databaseDao.query(sql);
-		while(databaseDao.next()){
-			String enable=databaseDao.getString("enable");
-			//检查账户可用性是因为，如果账户没被禁用，则取出数据库中的数据为User对象user设值，并保存在session中
-			if( ("use").equals(enable)  ){
-				user.setUserId(databaseDao.getInt("userId"));
-				user.setType(databaseDao.getString("type"));
-				user.setEnable(enable);
-				user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
-				user.setSex(databaseDao.getString("sex"));
-				user.setHobby(databaseDao.getString("hobby"));
-				user.setImgUrl(databaseDao.getString("imgUrl"));
-				databaseDao.close();
-				return 1;//可以登录
+		boolean returnValue=false;
+		String sql="insert into user(type,name,email,password,salt,enable) values('"+
+				user.getType()+"','"+user.getName()+"','"+user.getEmail()+"','"+
+				user.getPassword()+"','"+user.getSalt()+"','"+user.getEnable()+"')";
+		if(databaseDao.update(sql)==1){
+			//如果成功插入user表，再进行以下操作
+			sql="SELECT userId FROM user WHERE name LIKE '"+user.getName()+"'";
+			databaseDao.query(sql);
+			int userId = -1;	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
+			if(databaseDao.next()){
+				userId=databaseDao.getInt("userId");	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
 			}
-			databaseDao.close();
-			return 0;//用户存在，但被停用
+			sql="insert into userinformation(userId) values("+userId+")";	//插入该用户的信息
+			if(databaseDao.update(sql)==1){
+				//如果成功插入userinformation表，再进行以下操作
+				returnValue=true;
+			}
 		}
 		databaseDao.close();
-		return -1;//该用户不存在或密码错误
-	}	
-	
+		return returnValue;
+	}
 	//更改密码
-	public Integer changePassword(User user,String originPassword,String newPassword) throws Exception{
+	public void changePassword(User user) throws Exception{
 		DatabaseDao databaseDao=new DatabaseDao();
 		//先检查原密码是否正确
-		String sql="SELECT *"+" FROM user"+" WHERE user.userId="+user.getUserId()+" AND user.password LIKE '"+originPassword+"'";
-		databaseDao.query(sql);
-		if(!databaseDao.next()){
-			databaseDao.close();
-			return 0;	//原密码错误
-		}
-		//原码正确，开始修改密码
-		else{
-			sql="UPDATE user"+" SET password='"+newPassword+"'"+" WHERE user.userId="+user.getUserId();
-			databaseDao.update(sql);
-			user.setPassword(newPassword);	//为User对象设置新密码
-			databaseDao.close();
-			return 1;	//成功修改密码
-		}
+		String sql="UPDATE user"+" SET password='"+user.getPassword()+"',salt='"+user.getSalt()+"' WHERE user.userId="+user.getUserId();
+		databaseDao.update(sql);
+		databaseDao.close();
 	}
 	
 	public void changePersonalData(User user) throws Exception{
@@ -150,35 +118,6 @@ public class UserDao {
 		databaseDao.update(sql);
 		databaseDao.close();
 	}
-	
-	//切换用户的可用性
-	public Integer changeEnable(String id,DatabaseDao databaseDao)throws SQLException{//查询失败返回-1
-		String sql = "select * from user where userId in ("+id+")";
-		databaseDao.query(sql);
-		while (databaseDao.next()) {
-			String enable=databaseDao.getString("enable");
-			if("use".equals(enable))
-				enable="stop";
-			else
-				enable="use";
-			sql = "update user set enable='"+enable+"' where userId in ("+id+")";
-			databaseDao.update(sql);
-			databaseDao.close();
-			return 1;
-		}
-		databaseDao.close();
-		return 0;
-	}
-	/*
-	//删除多个用户
-	public Integer deletes(String ids,DatabaseDao databaseDao)throws SQLException{//查询失败返回-1
-		if(ids!=null && ids.length()>0){
-			String sql = "delete from user where userId in ("+ids+")";
-			return databaseDao.update(sql);
-		}else
-			return -1;
-	}
-	*/
 	//切换账户可用性
 	public void changeEnable(int userId){
 		try {
@@ -219,28 +158,6 @@ public class UserDao {
 			e.printStackTrace();
 		}
 	}
-	/*
-	//按条件搜索用户
-	public List<User> searchUsers(PageInformation pageInformation,String type,String name,String enable) throws Exception{
-		DatabaseDao databaseDao=new DatabaseDao();
-		String sqlCount="SELECT COUNT(*) AS count1 FROM user WHERE type LIKE '"+type+"' AND name LIKE '%"+name+"%' AND enable LIKE '"+enable+"'";
-		Integer allRecordCount=databaseDao.getCount(sqlCount);//符合条件的总记录数
-		Tool.setPageInformation(allRecordCount, pageInformation);//更新pageInformation的总页数等
-		String sqlSelect="SELECT * FROM user WHERE type LIKE '"+type+"' AND name LIKE '%"+name+"%' AND enable LIKE '"+enable+"' GROUP BY userId";
-		databaseDao.query(sqlSelect);
-		List<User> searchUsers=new ArrayList<User>();
-		while(databaseDao.next()){
-			User user=new User();
-			user.setUserId(databaseDao.getInt("userId"));
-			user.setType(databaseDao.getString("type"));
-			user.setName(databaseDao.getString("name"));
-			user.setPassword(databaseDao.getString("password"));
-			user.setEnable(databaseDao.getString("enable"));
-			searchUsers.add(user);
-		}
-		return searchUsers;
-	}
-	*/
 	//获取记录数
 	public Integer count(DatabaseDao databaseDao) throws SQLException{
 		String strSQL = "select count(*) as recordcount from user";
@@ -248,5 +165,138 @@ public class UserDao {
 		if (databaseDao.next()) 
 			return databaseDao.getInt("recordcount");		
 		return 0;
+	}
+	//根据用户名获取一个用户的所有信息
+	public User getUserByName(String name) throws Exception{
+		User user=new User();
+		DatabaseDao databaseDao=new DatabaseDao();
+		String sql="SELECT *"+" FROM user u1,userinformation u2"+" WHERE u1.userId=u2.userId AND u1.name LIKE '"+name+"'";
+		System.out.println(sql);
+		databaseDao.query(sql);
+		if(databaseDao.next()){
+			user.setUserId(databaseDao.getInt("userId"));
+			user.setName(databaseDao.getString("name"));
+			user.setEmail(databaseDao.getString("email"));
+			user.setPhoneNum(databaseDao.getString("phoneNum"));
+			user.setType(databaseDao.getString("type"));
+			user.setEnable(databaseDao.getString("enable"));
+			user.setPassword(databaseDao.getString("password"));
+			user.setSalt(databaseDao.getString("salt"));
+			user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
+			user.setSex(databaseDao.getString("sex"));
+			user.setHobby(databaseDao.getString("hobby"));
+			user.setImgUrl(databaseDao.getString("imgUrl"));
+			databaseDao.close();
+			return user;
+		}
+		else{
+			databaseDao.close();
+			return user;
+		}
+	}
+	//根据电子邮箱获取一个用户的所有信息
+	public User getUserByEmail(String email) throws Exception{
+		User user=new User();
+		DatabaseDao databaseDao=new DatabaseDao();
+		String sql="SELECT *"+" FROM user u1,userinformation u2"+" WHERE u1.userId=u2.userId AND u1.email LIKE '"+email+"'";
+		System.out.println(sql);
+		databaseDao.query(sql);
+		if(databaseDao.next()){
+			user.setUserId(databaseDao.getInt("userId"));
+			user.setName(databaseDao.getString("name"));
+			user.setEmail(databaseDao.getString("email"));
+			user.setPhoneNum(databaseDao.getString("phoneNum"));
+			user.setType(databaseDao.getString("type"));
+			user.setEnable(databaseDao.getString("enable"));
+			user.setPassword(databaseDao.getString("password"));
+			user.setSalt(databaseDao.getString("salt"));
+			user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
+			user.setSex(databaseDao.getString("sex"));
+			user.setHobby(databaseDao.getString("hobby"));
+			user.setImgUrl(databaseDao.getString("imgUrl"));
+			databaseDao.close();
+			return user;
+		}
+		else{
+			databaseDao.close();
+			return user;
+		}
+	}
+	//根据手机号获取一个用户的所有信息
+	public User getUserByPhoneNum(String phoneNum) throws Exception{
+		User user=new User();
+		DatabaseDao databaseDao=new DatabaseDao();
+		String sql="SELECT *"+" FROM user u1,userinformation u2"+" WHERE u1.userId=u2.userId AND u1.phoneNum LIKE '"+phoneNum+"'";
+		System.out.println(sql);
+		databaseDao.query(sql);
+		if(databaseDao.next()){
+			user.setUserId(databaseDao.getInt("userId"));
+			user.setName(databaseDao.getString("name"));
+			user.setEmail(databaseDao.getString("email"));
+			user.setPhoneNum(databaseDao.getString("phoneNum"));
+			user.setType(databaseDao.getString("type"));
+			user.setEnable(databaseDao.getString("enable"));
+			user.setPassword(databaseDao.getString("password"));
+			user.setSalt(databaseDao.getString("salt"));
+			user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
+			user.setSex(databaseDao.getString("sex"));
+			user.setHobby(databaseDao.getString("hobby"));
+			user.setImgUrl(databaseDao.getString("imgUrl"));
+			databaseDao.close();
+			return user;
+		}
+		else{
+			databaseDao.close();
+			return user;
+		}
+	}
+	//根据字段名，查是否有字段值为value的记录
+	//返回值：1表示有相同值、-1表示没有相同值
+	public int hasStringValue(String fieldName, String value) throws Exception{
+		int result = -1;
+		DatabaseDao databaseDao=new DatabaseDao();
+		String sql="select * from user where "+fieldName+"='"+value+"'";
+		databaseDao.query(sql);
+		if (databaseDao.next()) {
+			result=1;
+		}
+		databaseDao.close();
+		return result;
+	}
+	
+	public boolean changePasswordByEamil(User user) throws Exception{
+		DatabaseDao databaseDao=new DatabaseDao();
+		boolean result=false;
+		String sql="UPDATE user SET password='"+user.getPassword()+"',salt='"+user.getSalt()+"' WHERE email='"+user.getEmail()+"'";
+		if(databaseDao.update(sql)==1){
+			//若更新影响一行，则代表更新成功
+			result=true;
+		}
+		databaseDao.close();
+		return result;
+	}
+	
+	public boolean phoneRegister(User user) throws Exception{
+		DatabaseDao databaseDao=new DatabaseDao();
+		boolean returnValue=false;
+		String sql="insert into user(type,name,phoneNum,password,salt,enable) values('"+
+				user.getType()+"','"+user.getName()+"','"+user.getPhoneNum()+"','"+
+				user.getPassword()+"','"+user.getSalt()+"','"+user.getEnable()+"')";
+		if(databaseDao.update(sql)==1){
+			//如果成功插入user表，再进行以下操作
+			sql="SELECT userId FROM user WHERE name LIKE '"+user.getName()+"'";
+			databaseDao.query(sql);
+			int userId = -1;	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
+			if(databaseDao.next()){
+				userId=databaseDao.getInt("userId");	//获取新建用户的userId,用来存储该用户的信息(性别，爱好等);
+			}
+			sql="insert into userinformation(userId) values("+userId+")";	//插入该用户的信息
+			if(databaseDao.update(sql)==1){
+				//如果成功插入userinformation表，再进行以下操作
+				returnValue=true;
+			}
+		}
+		databaseDao.close();
+		return returnValue;
 	}
 }

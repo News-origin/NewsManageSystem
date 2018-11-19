@@ -15,6 +15,7 @@ import service.UserService;
 import tools.PageInformation;
 
 public class UserServiceTest {
+	/*
 	static protected UserService userService;
 	
 	@BeforeClass
@@ -69,4 +70,5 @@ public class UserServiceTest {
 		int result=userService.changePassword(user, "123456", "123456");
 		assertEquals(result,1);
 	}
+	*/
 }

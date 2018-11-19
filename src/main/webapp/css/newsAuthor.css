@@ -65,9 +65,6 @@
 	float: left;
 	border: 1px solid #000000;
 	margin-left: 70px;
-	display:none;
-}
-.middle_right_show{
 	display:block;
 }
 .middle_left ul, .middle_right table{

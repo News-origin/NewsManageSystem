@@ -28,6 +28,7 @@
 .bottom {
 	width: 820px;
 	height: 30px;
+	margin-top:20px;
 	margin-left: auto;
 	margin-right: auto;
 	border-top: 1px solid #000000;
@@ -39,10 +40,9 @@
 }
 .middle{
 	width: 950px;
-	height: 500px;
+	height:500px;
 	margin-left: auto;
 	margin-right: auto;
-	margin-bottom: 20px;
 }
 .middle_left{
 	width: 220px;
@@ -65,9 +65,6 @@
 	float: left;
 	border: 1px solid #000000;
 	margin-left: 70px;
-	display:none;
-}
-.middle_right_show{
 	display:block;
 }
 .middle_left ul, .middle_right table{

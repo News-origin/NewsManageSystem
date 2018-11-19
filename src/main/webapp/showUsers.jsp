@@ -56,14 +56,13 @@
     	  		page.value=totalPageCount.value;
     	  	}
     	  	//提交
-    	  	document.getElementById('listOnePageUsers').submit();
+		  	$( "#middle_right" ).load( "/NewsManageSystem/servlet/UserServlet?type=listOnePageUsers&page="+page.value
+		  		+"&pageSize="+pageSize.value,$("#listOnePageUsers").serialize());
       	}
 	</script>
-	<link href="css/manager.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-	<jsp:include page="/top.jsp" />
 	<form
 		action="/NewsManageSystem/servlet/UserServlet?type=listOnePageUsers"
 		id="listOnePageUsers" method="post">
@@ -137,6 +136,5 @@
 			type="hidden" name="result" id="result"
 			value="${requestScope.pageInformation.result}">
 	</form>
-	<jsp:include page="/bottom.jsp" />
 </body>
 </html>

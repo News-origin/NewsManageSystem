@@ -19,6 +19,13 @@
     <description>This is the description of my J2EE component</description>
     <servlet-class>servlet.CommentServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>ImageCheckCodeServlet</servlet-name>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <description>This is the description of my J2EE component</description>
+    <servlet-class>servlet.ImageCheckCodeServlet</servlet-class>
+  </servlet>
+
 
 
   <servlet-mapping>
@@ -32,6 +39,10 @@
   <servlet-mapping>
     <servlet-name>CommentServlet</servlet-name>
     <url-pattern>/servlet/CommentServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ImageCheckCodeServlet</servlet-name>
+    <url-pattern>/servlet/ImageCheckCodeServlet</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>charencode</filter-name>
@@ -47,7 +58,7 @@
     <init-param>
         <param-name>includedPages</param-name>
         <param-value>
-            /login.jsp,/normalUsersManagement.jsp,/newsAuthor.jsp,/addNews.jsp,/manager.jsp
+            /login.jsp,/addNews.jsp,/userMain.jsp
         </param-value>
     </init-param>
   </filter>

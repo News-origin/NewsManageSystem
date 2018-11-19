@@ -55,14 +55,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	  		page.value=totalPageCount.value;
     	  	}
     	  	//提交
-    	  	document.getElementById('listOnePageNews').submit();
+		  	$( "#middle_right").load( "/NewsManageSystem/servlet/NewsServlet?type=getOnePageNews&page="+page.value
+		  		+"&pageSize="+pageSize.value,$("#listOnePageNews").serialize());
       	}
 	</script>
-	<link href="/NewsManageSystem/css/manager.css" rel="stylesheet" type="text/css">
   </head>
   
   <body>
-	<jsp:include page="/top.jsp" />
 	<form
 		action="/NewsManageSystem/servlet/NewsServlet?type=getOnePageNews"
 		id="listOnePageNews" method="post">
@@ -81,9 +80,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<tr>
 							<td><c:out value="${news.newsId}" /></td>
 							<td><c:out value="${news.caption}" /></td>
-							<td><c:out value="${news.authorId}" /></td>
+							<td><c:out value="${news.name}" /></td>
 							<td><c:out value="${news.publishTime}" /></td>
-							<td><a href="/NewsManageSystem/servlet/NewsServlet?type=editNews&newsId=${news.newsId}">编辑</a></td>
+							<td><input type="button" value="编辑" onclick="window.location.href='/NewsManageSystem/servlet/NewsServlet?type=editNews&newsId=${news.newsId}'" /></td>
 						</tr>
 					</c:if>
 				</c:if>
@@ -91,9 +90,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<tr>
 						<td><c:out value="${news.newsId}" /></td>
 						<td><c:out value="${news.caption}" /></td>
-						<td><c:out value="${news.authorId}" /></td>
+						<td><c:out value="${news.name}" /></td>
 						<td><c:out value="${news.publishTime}" /></td>
-						<td><a href="/NewsManageSystem/servlet/NewsServlet?type=deleteNews&newsId=${news.newsId}">删除</a></td>
+						<td><input type="button" onclick="deleteANews(${news.newsId})" value="删除" /></td>
 					</tr>
 				</c:if>
 			</c:forEach>
@@ -142,6 +141,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			type="hidden" name="result" id="result"
 			value="${requestScope.pageInformation.result}">
 	</form>
-	<jsp:include page="/bottom.jsp" />
   </body>
+  <script type="text/javascript" src="js/manageNews.js"></script>
 </html>

@@ -1,10 +1,46 @@
 /* CSS Document */
+/* CSS Document */
+* {                  /* 清除不同浏览器的不同外边距 */
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.frame{
+	margin-left: auto;
+	margin-right: auto;
+	width: 1366px;
+	position:relative;
+}
+
+.top{
+	margin-left: auto;
+	margin-right: auto;
+	width:1024px;
+}
+.bottom {
+	width: 820px;
+	height: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:10px;
+	border-top: 1px solid #000000;
+}
+.bottom p{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
 .loginDiv{
 	margin-left: auto;
 	margin-right: auto;
-	width: 400px;
-	height: 160px;
 	margin-bottom: 10px;
+}
+.loginDiv_table{
+	margin-left: auto;
+	margin-right: auto;
 }
 .noShowed{
 	display: none;

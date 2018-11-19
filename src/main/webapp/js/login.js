@@ -1,55 +1,17 @@
 // JavaScript Document
-/*
-function loginCheck(){
-	var x=checkUsersName() && checkUsersPassword();
-	if(x){
-		alert("登录成功！！！");
-		return true;
-	}
-	else{
-		alert("请正确输入账号和密码");
-		return false;
-	}
-}
 
-function checkUsersName() {
-	var cun = true;
-	var usersNameTip=document.getElementById("usersNameTip");
- 	var usersName = document.getElementById("usersName").value;
- 	if (usersName.length==0) {
- 		cun = false;
-		usersNameTip.setAttribute("class","noShowed");
- 	}else{
-		usersNameTip.setAttribute("class","showed");
-	}
- 	return cun;
-}
-
-function checkUsersPassword() {
-	var cup = true;
-	var passwordTip=document.getElementById("passwordTip");
- 	var password = document.getElementById("password").value;
- 	if (password.length==0) {
- 		cup = false;
-		passwordTip.setAttribute("class","showed");
- 	}else{
-		passwordTip.setAttribute("class","noShowed");
-	}
- 	return cup;
-}
-*/
 function valName(){
-	var pattern = new RegExp("^[a-z]([a-z0-9])*[-_]?([a-z0-9]+)$","i");//创建模式对象
-	var str1=document.getElementById("usersName").value;//获取文本框的内容
+	//var pattern = new RegExp("^[a-z]([a-z0-9])*[-_]?([a-z0-9]+)$","i");//创建模式对象
+	var str1=document.getElementById("userName").value;//获取文本框的内容
 	
-	if(document.getElementById("usersName").value==null || document.getElementById("usersName").value==""){
-		document.getElementById("usersNameTip").innerHTML="*不能为空";
+	if(document.getElementById("userName").value==null || document.getElementById("userName").value==""){
+		document.getElementById("userNameTip").innerHTML="*不能为空";
 		return false;
-	}else if(str1.length>=8 && pattern.test(str1)){//pattern.test() 模式如果匹配，会返回true，不匹配返回false
-		document.getElementById("usersNameTip").innerHTML="ok";
+	}else if(str1.length>=8){//pattern.test() 模式如果匹配，会返回true，不匹配返回false
+		document.getElementById("userNameTip").innerHTML="ok";
 		return true;
 	}else{
-		document.getElementById("usersNameTip").innerHTML="*用户名至少需要8个字符，以字母开头，以字母或数字结尾，可以有-和_";
+		document.getElementById("userNameTip").innerHTML="*用户名至少需要8个字符";
 		return false;
 	}
 }
@@ -70,12 +32,78 @@ function valPassword(){
 	}
 }
 
-	
-function submit1(){
-	result1=valName();
-	result1=valPassword() && result1;
-	if( result1)
-		return true;//提交
-	else 
-		return false;//阻止提交
+function valCheckCode(){
+	if(document.getElementById("checkCode").value==null || document.getElementById("checkCode").value==""){
+		document.getElementById("checkCodeTip").innerHTML="*不能为空";
+		return false;
+	}
+	else{
+		document.getElementById("checkCodeTip").innerHTML="ok";
+		return true;
+	}
 }
+
+function getNewCheckCode(){
+	document.getElementById("checkImg").src="/NewsManageSystem/servlet/ImageCheckCodeServlet?"+Math.random();
+}
+
+$(document).ready(function(){
+	//设置失去焦点事件的处理函数
+	$("#userName").blur(function(){
+		valName();
+	});
+	$("#password").blur(function(){
+		valPassword();
+	});
+	$("#checkCode").blur(function(){
+		valCheckCode();
+	});
+	//设置点击事件的处理函数
+	$("#checkImg").click(function(){
+		$("#checkImg").attr("src","/NewsManageSystem/servlet/ImageCheckCodeServlet?rand="+Math.random());
+	});
+	$("#submitForm").click(function(){
+		var canSubmit=false;
+		canSubmit=valName();
+		canSubmit=canSubmit&valPassword();
+		canSubmit=canSubmit&valCheckCode();
+		if(canSubmit){
+			$.ajax({
+				url:"/NewsManageSystem/servlet/UserServlet?type=login",
+				type:"post",
+				data:$("#loginForm").serialize(),
+				dataType:"json",
+				cache:false,
+				error:function(textStatus, errorThrown){
+					alert("系统ajax交互错误: " + textStatus);
+				},
+				success:function(data,textStatus){
+					if(data.result==1){
+						window.location.href = '/NewsManageSystem/index.jsp';
+					}
+					else if(data.result==0){
+						alert("用户/电子邮箱/手机号不存在");
+					}
+					else if(data.result==-1){
+						alert("密码错误");
+					}
+					else if(data.result==-2){
+						alert("该用户被禁用，请联系客服解封");
+					}
+					else if(data.result==-3){
+						alert("对数据库操作失败");
+					}
+					else if(data.result==-5){
+						alert("验证码错误");
+					}
+					else if(data.result==-4){
+						alert("session中没有验证码，请刷新页面重新操作");
+					}
+				}
+			});
+		}
+		else{
+			alert("请按提示信息正确输入信息");
+		}
+	});
+});

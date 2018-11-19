@@ -13,6 +13,7 @@ import dao.UserDao;
 import tools.PageInformation;
 
 public class UserDaoTest {
+	/*
 	@Test
 	public void testCount() throws Exception {
 		UserDao userDao=new UserDao();
@@ -88,4 +89,5 @@ public class UserDaoTest {
 		int result=userDao.changeEnable(id,databaseDao);
 		assertEquals(result,1);
 	}
+	*/
 }

@@ -12,8 +12,8 @@
 <head>
 	<jsp:include page="/style.jsp" />
 	<title>登录</title>
-	<link href="css/index.css" rel="stylesheet" type="text/css">
 	<link href="css/login.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="js/jquery-3.3.1.js"></script>
 	<script type="text/javascript" src="js/login.js"></script>
 </head>
 
@@ -21,18 +21,18 @@
 	<div class="frame">
 		<jsp:include page="/top.jsp" />
 	    <div class="loginDiv">
-	        <form action="servlet/UserServlet?type=login" method="post" onsubmit="return submit1()">
-				<table width="400" border="0" cellspacing="3" cellpadding="0">
+	        <form id="loginForm">
+				<table class="loginDiv_table" width="800" border="0" cellspacing="3" cellpadding="0">
 		          <tbody>
 		            <tr>
 		              <td width="120">&nbsp;</td>
 		              <td width="280">登录</td>
 		            </tr>
 		            <tr>
-		              <td style="text-align: right;">用户名：</td>
+		              <td style="text-align: right;">用户名/电子邮箱/手机号：</td>
 		              <td>
-		                <input type="text" id="usersName" name="userName">
-		                <p id="usersNameTip" style="text-align: left;"></p>
+		                <input type="text" id="userName" name="userName">
+		                <p id="userNameTip" style="text-align: left;"></p>
 		              </td>
 		            </tr>
 		            <tr>
@@ -42,10 +42,27 @@
 		                <p id="passwordTip" style="text-align: left;"></p>
 		              </td>
 		            </tr>
+					<tr>
+						<td style="text-align: right;">验证码：</td>
+						<td>
+							<input name="checkCode" type="text" id="checkCode" style="height: 50px;" />
+							<p id="checkCodeTip" style="color: red;text-align: left;"></p>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><img  id="checkImg" src="/NewsManageSystem/servlet/ImageCheckCodeServlet?" class="hand" /></td>
+					</tr>
 		            <tr>
-		              <td style="text-align: right;">&nbsp;</td>
+		              <td style="text-align: right;"></td>
 		              <td>
-		                <input type="submit" value="登录" style="width: 100px;height: 20px;">
+		                <input id="submitForm" type="button" value="登录" style="width: 100px;height: 20px;">
+		              </td>
+		            </tr>
+		            <tr>
+		              <td style="text-align: right;"></td>
+		              <td>
+		              	<a href="findPassword.jsp">忘记密码？请点击这里</a>
 		              </td>
 		            </tr>
 		          </tbody>
